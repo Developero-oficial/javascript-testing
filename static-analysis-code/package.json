@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src --out-dir dist",
-    "lint": "eslint --ignore-path .gitignore ."
+    "lint": "eslint --ignore-path .gitignore .",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.js\""
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,7 @@
     "@babel/cli": "^7.13.10",
     "@babel/core": "^7.13.13",
     "@babel/preset-env": "^7.13.12",
-    "eslint": "^7.23.0"
+    "eslint": "^7.23.0",
+    "prettier": "2.2.1"
   }
 }

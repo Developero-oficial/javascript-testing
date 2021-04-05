@@ -5,7 +5,8 @@
   },
   "extends": ["eslint:recommended"],
   "rules": {
-    "no-console": "off"
+    "no-console": "off",
+    "prefer-template": "error"
   },
   "env": {
     "browser": true
