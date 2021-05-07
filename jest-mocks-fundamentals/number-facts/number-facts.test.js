@@ -1,5 +1,7 @@
 import { getRandomNumberFact } from "./";
 
+jest.mock("./service");
+
 test("should return a random number fact", async () => {
   const numberFact = await getRandomNumberFact();
 
