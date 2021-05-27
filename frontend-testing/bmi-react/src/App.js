@@ -32,7 +32,7 @@ function App() {
     const bmi = calculateBmi({weight: weight.value, height: height.value})
     const bmiEstimation = calculateBmiEstimation({bmi})
 
-    setBmi(bmi)
+    setBmi(Number(bmi))
     setBmiEstimation(bmiEstimation)
   }
 
@@ -40,7 +40,7 @@ function App() {
     <div className="App">
       <h1>BMI Calculator</h1>
 
-      {bmi && <h2>BMI: {bmi}</h2>}
+      {bmi && <h2>BMI: {bmi.toLocaleString()}</h2>}
 
       {bmiEstimation && <h2>BMI Estimation: {bmiEstimation}</h2>}
 
