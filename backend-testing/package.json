@@ -4,6 +4,7 @@
   "description": "Develop the next endpoints:",
   "main": "index.js",
   "scripts": {
+    "start:local": "nodemon ./src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.+(js|md|)\""
@@ -15,6 +16,13 @@
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "nodemon": "^2.0.7",
     "prettier": "^2.3.0"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "pino": "^6.11.3",
+    "pino-http": "^5.5.0"
   }
 }
