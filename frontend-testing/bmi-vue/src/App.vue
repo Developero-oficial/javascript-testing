@@ -15,8 +15,8 @@
 
       <button type="submit">Send</button>
 
-      <h2 v-if="bmi">Result: {{ bmi.toLocaleString() }}</h2>
-      <h2 v-if="bmiEstimation">Estimation: {{ bmiEstimation }}</h2>
+      <h2 v-if="bmi">BMI: {{ bmi.toLocaleString() }}</h2>
+      <h2 v-if="bmiEstimation">BMI Estimation: {{ bmiEstimation }}</h2>
     </form>
   </div>
 </template>
