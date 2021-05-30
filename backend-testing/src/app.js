@@ -17,6 +17,10 @@ router.post('/users', (req, res) => {
   return res.status(201).send(users)
 })
 
+router.get('/users', (req, res) => {
+  return res.status(200).send(users)
+})
+
 app.use(router)
 
 module.exports = app
