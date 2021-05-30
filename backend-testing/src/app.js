@@ -27,6 +27,21 @@ router.get('/users/:uid', (req, res) => {
   return res.status(200).send(user)
 })
 
+router.put('/users/:uid', (req, res) => {
+  const { name, address, age } = req.body
+  const { uid } = req.params
+
+  const usersUpdated = users.map((user) => {
+    if (user.uid === uid) {
+      return { ...user, name, address, age }
+    }
+
+    return user
+  })
+
+  return res.status(200).send(usersUpdated)
+})
+
 app.use(router)
 
 module.exports = app
