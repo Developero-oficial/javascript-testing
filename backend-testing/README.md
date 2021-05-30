@@ -23,7 +23,7 @@ Store new user.
 
 ```
 curl -X POST -H "Content-Type: application/json" \
-    -d '{"name": "john", "address": "fake address", "age": "20"}' \
+    -d '{"name": "john", "address": "fake address", "age": "20", "uid": "abc"}' \
     http://localhost:3001/users
 ```
 

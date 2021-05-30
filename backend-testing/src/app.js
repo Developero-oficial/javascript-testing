@@ -11,14 +11,20 @@ const router = express.Router()
 const users = []
 
 router.post('/users', (req, res) => {
-  const { name, address, age } = req.body
+  const { name, address, age, uid } = req.body
 
-  users.push({ name, address, age })
+  users.push({ name, address, age, uid })
   return res.status(201).send(users)
 })
 
 router.get('/users', (req, res) => {
   return res.status(200).send(users)
+})
+
+router.get('/users/:uid', (req, res) => {
+  const { uid } = req.params
+  const user = users.find(({ uid: userUid }) => userUid === uid)
+  return res.status(200).send(user)
 })
 
 app.use(router)
