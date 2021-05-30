@@ -42,6 +42,12 @@ router.put('/users/:uid', (req, res) => {
   return res.status(200).send(usersUpdated)
 })
 
+router.delete('/users/:uid', (req, res) => {
+  const { uid } = req.params
+  const usersUpdated = users.filter(({ uid: userUid }) => userUid !== uid)
+  return res.status(200).send(usersUpdated)
+})
+
 app.use(router)
 
 module.exports = app
