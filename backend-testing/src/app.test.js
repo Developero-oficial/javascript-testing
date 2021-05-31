@@ -1,20 +1,14 @@
 const request = require('supertest')
-const express = require('express')
+const app = require('./app')
 
-const app = express()
-
-app.get('/user', async (req, res) => {
-  res.status(200).json({ name: 'john' })
-})
-
-describe('supertest example', () => {
-  it('demo', async () => {
+describe('users', () => {
+  it('should store a user', async () => {
     const result = await request(app)
-      .get('/user')
-      .expect('Content-Type', /json/)
-      .expect('Content-Length', '15')
-      .expect(200)
+      .post('/users')
+      .send({ name: 'john', address: 'fake address', age: '20', uid: 'abc' })
+      .set('Accept', 'application/json')
+      .expect(201)
 
-    expect(result.text).toEqual(JSON.stringify({ name: 'john' }))
+    expect(result.body).toEqual({ message: 'success' })
   })
 })
