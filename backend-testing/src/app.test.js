@@ -1,5 +1,13 @@
 const request = require('supertest')
 const app = require('./app')
+const { getUsers, addUser } = require('./data/users')
+
+jest.mock('./data/users')
+
+beforeEach(() => {
+  getUsers.mockReset()
+  addUser.mockReset()
+})
 
 describe('users', () => {
   test('should store a user', async () => {
@@ -13,6 +21,7 @@ describe('users', () => {
   })
 
   test('should get all users', async () => {
+    getUsers.mockReturnValue([])
     const result = await request(app).get('/users').expect(200)
 
     expect(result.body).toEqual([])
