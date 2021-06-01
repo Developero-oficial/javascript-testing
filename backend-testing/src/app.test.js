@@ -1,6 +1,6 @@
 const request = require('supertest')
 const app = require('./app')
-const { getUsers, addUser } = require('./data/users')
+const { getUsers, addUser, updateUserByUid } = require('./data/users')
 const { buildUser } = require('./__fixtures__/users')
 
 jest.mock('./data/users')
@@ -8,6 +8,7 @@ jest.mock('./data/users')
 beforeEach(() => {
   getUsers.mockReset()
   addUser.mockReset()
+  updateUserByUid.mockReset()
 })
 
 describe('users', () => {
@@ -34,5 +35,18 @@ describe('users', () => {
     const result = await request(app).get('/users').expect(200)
 
     expect(result.body).toEqual([])
+  })
+
+  test('should update an user', async () => {
+    const user = buildUser()
+    updateUserByUid.mockReturnValue([user])
+
+    const result = await request(app)
+      .put(`/users/${user.uid}`)
+      .send(user)
+      .set('Accept', 'application/json')
+      .expect(200)
+
+    expect(result.body).toEqual([user])
   })
 })
