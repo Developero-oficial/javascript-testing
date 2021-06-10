@@ -1,4 +1,4 @@
-const { addUser, getUsers, findUserByUid } = require('./users')
+const { addUser, getUsers, findUserByUid, updateUserByUid } = require('./users')
 const { buildUser } = require('../__fixtures__/users')
 
 test('should add new user', () => {
@@ -16,4 +16,11 @@ test('findUserByUid - should return a valid user', () => {
   const user = buildUser()
   const userFound = findUserByUid({ uid: user.uid })
   expect(userFound).toEqual(user)
+})
+
+test('updateUserByUid - should update a valid user', () => {
+  const user = buildUser()
+  const userUpdated = { ...user, name: 'updated' }
+  const usersUpdated = updateUserByUid(userUpdated)
+  expect(usersUpdated).toEqual([userUpdated])
 })
