@@ -11,3 +11,5 @@ module.exports.saveProduct = ({ name, size, description }) => {
 }
 
 module.exports.getProducts = () => Product.find().exec()
+
+module.exports.getProductByUid = ({ uid }) => Product.findById(uid).exec()
