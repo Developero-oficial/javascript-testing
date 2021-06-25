@@ -5,6 +5,7 @@ const {
   saveProduct,
   getProducts,
   getProductByUid,
+  updateProductByUid,
 } = require('../src/data/product-data')
 
 jest.mock('../src/data/product-data')
@@ -13,6 +14,7 @@ afterEach(() => {
   saveProduct.mockClear()
   getProducts.mockClear()
   getProductByUid.mockClear()
+  updateProductByUid.mockClear()
 })
 
 describe('products unit tests', () => {
@@ -53,7 +55,7 @@ describe('products unit tests', () => {
     expect(response.body).toEqual({ products: [] })
   })
 
-  test.only('GET /products/:uid', async () => {
+  test('GET /products/:uid', async () => {
     getProductByUid.mockReturnValueOnce({
       name: 'fake',
       size: 1,
@@ -69,6 +71,44 @@ describe('products unit tests', () => {
         name: 'fake',
         size: 1,
         description: 'this is a test',
+        _id: 'abc',
+      },
+    })
+  })
+
+  test.only('PUT /products', async () => {
+    updateProductByUid.mockReturnValueOnce(
+      Promise.resolve({
+        name: 'updated',
+        size: 10,
+        description: 'pass',
+        _id: 'abc',
+      })
+    )
+
+    const response = await request(app)
+      .put('/products/abc')
+      .send({
+        name: 'updated',
+        size: 10,
+        description: 'pass',
+      })
+      .expect(200)
+
+    expect(updateProductByUid).toHaveBeenCalledWith(
+      { uid: 'abc' },
+      {
+        name: 'updated',
+        size: 10,
+        description: 'pass',
+      }
+    )
+
+    expect(response.body).toEqual({
+      productUpdated: {
+        name: 'updated',
+        size: 10,
+        description: 'pass',
         _id: 'abc',
       },
     })
