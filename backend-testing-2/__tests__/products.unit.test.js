@@ -1,12 +1,13 @@
 const request = require('supertest')
 
 const app = require('../src/app')
-const { saveProduct } = require('../src/data/product-data')
+const { saveProduct, getProducts } = require('../src/data/product-data')
 
 jest.mock('../src/data/product-data')
 
 afterEach(() => {
   saveProduct.mockClear()
+  getProducts.mockClear()
 })
 
 describe('products unit tests', () => {
@@ -37,5 +38,13 @@ describe('products unit tests', () => {
         _id: 'abc',
       },
     })
+  })
+
+  test('GET /products', async () => {
+    getProducts.mockReturnValueOnce([])
+
+    const response = await request(app).get('/products').expect(200)
+
+    expect(response.body).toEqual({ products: [] })
   })
 })

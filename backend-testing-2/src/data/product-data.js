@@ -9,3 +9,5 @@ module.exports.saveProduct = ({ name, size, description }) => {
 
   return product.save()
 }
+
+module.exports.getProducts = () => Product.find().exec()
