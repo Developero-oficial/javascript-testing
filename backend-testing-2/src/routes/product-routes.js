@@ -1,56 +1,23 @@
 const express = require('express')
 
 const {
-  saveProduct,
-  getProducts,
-  getProductByUid,
-  updateProductByUid,
-  deleteProductByUid,
-} = require('../data/product-data')
+  saveProductController,
+  getProductsController,
+  getProductByUidController,
+  updateProductByUidController,
+  deleteProductByUidController,
+} = require('../controllers/product-controllers')
 
 const productRoutes = express.Router()
 
-productRoutes.post('/products', async (req, res) => {
-  const { name, size, description } = req.body
+productRoutes.post('/products', saveProductController)
 
-  const productStored = await saveProduct({
-    name,
-    size,
-    description,
-  })
+productRoutes.get('/products', getProductsController)
 
-  res.status(201).send({ productStored })
-})
+productRoutes.get('/products/:uid', getProductByUidController)
 
-productRoutes.get('/products', async (req, res) => {
-  const products = await getProducts()
-  res.status(200).send({ products })
-})
+productRoutes.put('/products/:uid', updateProductByUidController)
 
-productRoutes.get('/products/:uid', async (req, res) => {
-  const { uid } = req.params
-
-  const product = await getProductByUid({ uid })
-  res.status(200).send({ product })
-})
-
-productRoutes.put('/products/:uid', async (req, res) => {
-  const { uid } = req.params
-
-  const { name, size, description } = req.body
-
-  const productUpdated = await updateProductByUid(
-    { uid },
-    { name, size, description }
-  )
-  res.status(200).send({ productUpdated })
-})
-
-productRoutes.delete('/products/:uid', async (req, res) => {
-  const { uid } = req.params
-
-  const productRemoved = await deleteProductByUid({ uid })
-  res.status(200).send({ productRemoved })
-})
+productRoutes.delete('/products/:uid', deleteProductByUidController)
 
 module.exports.productRoutes = productRoutes
