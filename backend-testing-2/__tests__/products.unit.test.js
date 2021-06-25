@@ -6,6 +6,7 @@ const {
   getProducts,
   getProductByUid,
   updateProductByUid,
+  deleteProductByUid,
 } = require('../src/data/product-data')
 
 jest.mock('../src/data/product-data')
@@ -15,6 +16,7 @@ afterEach(() => {
   getProducts.mockClear()
   getProductByUid.mockClear()
   updateProductByUid.mockClear()
+  deleteProductByUid.mockClear()
 })
 
 describe('products unit tests', () => {
@@ -76,7 +78,7 @@ describe('products unit tests', () => {
     })
   })
 
-  test.only('PUT /products', async () => {
+  test('PUT /products', async () => {
     updateProductByUid.mockReturnValueOnce(
       Promise.resolve({
         name: 'updated',
@@ -109,6 +111,27 @@ describe('products unit tests', () => {
         name: 'updated',
         size: 10,
         description: 'pass',
+        _id: 'abc',
+      },
+    })
+  })
+
+  test('DELETE /products/:uid', async () => {
+    deleteProductByUid.mockReturnValueOnce({
+      name: 'fake',
+      size: 1,
+      description: 'this is a test',
+      _id: 'abc',
+    })
+
+    const response = await request(app).delete('/products/abc').expect(200)
+
+    expect(deleteProductByUid).toHaveBeenCalledWith({ uid: 'abc' })
+    expect(response.body).toEqual({
+      productRemoved: {
+        name: 'fake',
+        size: 1,
+        description: 'this is a test',
         _id: 'abc',
       },
     })

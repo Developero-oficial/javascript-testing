@@ -5,6 +5,7 @@ const {
   getProducts,
   getProductByUid,
   updateProductByUid,
+  deleteProductByUid,
 } = require('../data/product-data')
 
 const productRoutes = express.Router()
@@ -43,6 +44,13 @@ productRoutes.put('/products/:uid', async (req, res) => {
     { name, size, description }
   )
   res.status(200).send({ productUpdated })
+})
+
+productRoutes.delete('/products/:uid', async (req, res) => {
+  const { uid } = req.params
+
+  const productRemoved = await deleteProductByUid({ uid })
+  res.status(200).send({ productRemoved })
 })
 
 module.exports.productRoutes = productRoutes

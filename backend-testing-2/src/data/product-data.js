@@ -16,3 +16,5 @@ module.exports.getProductByUid = ({ uid }) => Product.findById(uid).exec()
 
 module.exports.updateProductByUid = ({ uid }, data) =>
   Product.findOneAndUpdate({ _id: uid }, data, { new: true })
+
+module.exports.deleteProductByUid = ({ uid }) => Product.deleteOne({ _id: uid })
