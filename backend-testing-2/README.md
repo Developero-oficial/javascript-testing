@@ -24,7 +24,7 @@ Store new product.
 ```
 curl -X POST -H "Content-Type: application/json" \
     -d '{"name": "my product", "size": "1", "description": "fake description"}' \
-    http://localhost:3001/products
+    http://localhost:8080/products
 ```
 
 Get all products.
