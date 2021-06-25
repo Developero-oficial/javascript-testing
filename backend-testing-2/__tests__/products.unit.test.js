@@ -8,6 +8,7 @@ const {
   updateProductByUid,
   deleteProductByUid,
 } = require('../src/data/product-data')
+const { buildProduct } = require('../__fixtures__/product-fixtures')
 
 jest.mock('../src/data/product-data')
 
@@ -21,31 +22,21 @@ afterEach(() => {
 
 describe('products unit tests', () => {
   test('POST /products', async () => {
-    saveProduct.mockReturnValueOnce(
-      Promise.resolve({
-        name: 'fake',
-        size: 1,
-        description: 'this is a test',
-        _id: 'abc',
-      })
-    )
+    const product = buildProduct()
+
+    saveProduct.mockReturnValueOnce(Promise.resolve(product))
 
     const response = await request(app)
       .post('/products')
       .send({
-        name: 'fake',
-        size: 1,
-        description: 'this is a test',
+        name: product.name,
+        size: product.size,
+        description: product.description,
       })
       .expect(201)
 
     expect(response.body).toEqual({
-      productStored: {
-        name: 'fake',
-        size: 1,
-        description: 'this is a test',
-        _id: 'abc',
-      },
+      productStored: product,
     })
   })
 
@@ -58,82 +49,62 @@ describe('products unit tests', () => {
   })
 
   test('GET /products/:uid', async () => {
-    getProductByUid.mockReturnValueOnce({
-      name: 'fake',
-      size: 1,
-      description: 'this is a test',
-      _id: 'abc',
-    })
+    const product = buildProduct()
+
+    getProductByUid.mockReturnValueOnce(product)
 
     const response = await request(app).get('/products/abc').expect(200)
 
     expect(getProductByUid).toHaveBeenCalledWith({ uid: 'abc' })
+
     expect(response.body).toEqual({
-      product: {
-        name: 'fake',
-        size: 1,
-        description: 'this is a test',
-        _id: 'abc',
-      },
+      product,
     })
   })
 
   test('PUT /products', async () => {
-    updateProductByUid.mockReturnValueOnce(
-      Promise.resolve({
-        name: 'updated',
-        size: 10,
-        description: 'pass',
-        _id: 'abc',
-      })
-    )
+    const product = buildProduct()
+
+    updateProductByUid.mockReturnValueOnce(Promise.resolve(product))
 
     const response = await request(app)
       .put('/products/abc')
       .send({
-        name: 'updated',
-        size: 10,
-        description: 'pass',
+        name: product.name,
+        size: product.size,
+        description: product.description,
       })
       .expect(200)
 
     expect(updateProductByUid).toHaveBeenCalledWith(
-      { uid: 'abc' },
+      { uid: product._id },
       {
-        name: 'updated',
-        size: 10,
-        description: 'pass',
+        name: product.name,
+        size: product.size,
+        description: product.description,
       }
     )
 
     expect(response.body).toEqual({
-      productUpdated: {
-        name: 'updated',
-        size: 10,
-        description: 'pass',
-        _id: 'abc',
-      },
+      productUpdated: product,
     })
   })
 
   test('DELETE /products/:uid', async () => {
-    deleteProductByUid.mockReturnValueOnce({
+    const product = buildProduct({
       name: 'fake',
       size: 1,
       description: 'this is a test',
       _id: 'abc',
     })
+
+    deleteProductByUid.mockReturnValueOnce(Promise.resolve(product))
 
     const response = await request(app).delete('/products/abc').expect(200)
 
     expect(deleteProductByUid).toHaveBeenCalledWith({ uid: 'abc' })
     expect(response.body).toEqual({
-      productRemoved: {
-        name: 'fake',
-        size: 1,
-        description: 'this is a test',
-        _id: 'abc',
-      },
+      productRemoved: product,
     })
   })
 })
