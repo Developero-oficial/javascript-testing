@@ -1,30 +1,21 @@
-const mongoose = require('mongoose')
-const { MongoMemoryServer } = require('mongodb-memory-server')
 const request = require('supertest')
 
 const app = require('../src/app')
-const { connectDb } = require('../src/db/mongo')
+const { connectDb, createUri, closeDb, cleanDb } = require('../src/db/mongo')
+const { saveProduct } = require('../src/data/product-data')
 const { buildProduct } = require('../__fixtures__/product-fixtures')
 
-let mongoServer
-
 beforeAll(async () => {
-  mongoServer = new MongoMemoryServer()
-  const mongoUri = await mongoServer.getUri()
+  const mongoUri = await createUri()
   await connectDb({ uri: mongoUri })
 })
 
 beforeEach(async () => {
-  const collections = await mongoose.connection.db.collections()
-
-  for (let collection of collections) {
-    await collection.deleteMany()
-  }
+  await cleanDb()
 })
 
 afterAll(async () => {
-  await mongoose.disconnect()
-  await mongoServer.stop()
+  await closeDb()
 })
 
 describe('products integration tests', () => {
@@ -57,22 +48,14 @@ describe('products integration tests', () => {
   test('GET /products with values', async () => {
     const product = buildProduct()
 
-    const responsePost = await request(app)
-      .post('/products')
-      .send({
-        name: product.name,
-        size: product.size,
-        description: product.description,
-      })
-      .expect(201)
+    const productStored = await saveProduct(product)
 
-    const { name, size, description, _id, __v } =
-      responsePost.body.productStored
+    const { name, size, description, _id, __v } = productStored
 
     const responseGet = await request(app).get('/products').expect(200)
 
     expect(responseGet.body).toEqual({
-      products: [{ name, size, description, _id, __v }],
+      products: [{ name, size, description, _id: String(_id), __v }],
     })
   })
 
@@ -89,38 +72,23 @@ describe('products integration tests', () => {
   test('GET /products/:uid with value', async () => {
     const product = buildProduct()
 
-    const responsePost = await request(app)
-      .post('/products')
-      .send({
-        name: product.name,
-        size: product.size,
-        description: product.description,
-      })
-      .expect(201)
+    const productStored = await saveProduct(product)
 
-    const { name, size, description, _id, __v } =
-      responsePost.body.productStored
+    const { name, size, description, _id, __v } = productStored
 
     const response = await request(app).get(`/products/${_id}`).expect(200)
 
     expect(response.body).toEqual({
-      product: { name, size, description, _id, __v },
+      product: { name, size, description, _id: String(_id), __v },
     })
   })
 
   test('PUT /products', async () => {
     const product = buildProduct()
 
-    const responsePost = await request(app)
-      .post('/products')
-      .send({
-        name: product.name,
-        size: product.size,
-        description: product.description,
-      })
-      .expect(201)
+    const productStored = await saveProduct(product)
 
-    const { _id, __v } = responsePost.body.productStored
+    const { _id, __v } = productStored
 
     const newProductValues = {
       name: 'this is a new name',
@@ -136,25 +104,18 @@ describe('products integration tests', () => {
     expect(response.body).toEqual({
       productUpdated: {
         ...newProductValues,
-        _id,
+        _id: String(_id),
         __v,
       },
     })
   })
 
-  test.only('DELETE /products/:uid', async () => {
+  test('DELETE /products/:uid', async () => {
     const product = buildProduct()
 
-    const responsePost = await request(app)
-      .post('/products')
-      .send({
-        name: product.name,
-        size: product.size,
-        description: product.description,
-      })
-      .expect(201)
+    const productStored = await saveProduct(product)
 
-    const { _id } = responsePost.body.productStored
+    const { _id } = productStored
 
     const response = await request(app).delete(`/products/${_id}`).expect(200)
 
