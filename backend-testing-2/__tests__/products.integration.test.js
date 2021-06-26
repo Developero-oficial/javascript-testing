@@ -75,4 +75,36 @@ describe('products integration tests', () => {
       products: [{ name, size, description, _id, __v }],
     })
   })
+
+  test('GET /products/:uid empty value', async () => {
+    const response = await request(app)
+      .get('/products/60d78bd12ce9f068ea3ce48f')
+      .expect(200)
+
+    expect(response.body).toEqual({
+      product: null,
+    })
+  })
+
+  test('GET /products/:uid with value', async () => {
+    const product = buildProduct()
+
+    const responsePost = await request(app)
+      .post('/products')
+      .send({
+        name: product.name,
+        size: product.size,
+        description: product.description,
+      })
+      .expect(201)
+
+    const { name, size, description, _id, __v } =
+      responsePost.body.productStored
+
+    const response = await request(app).get(`/products/${_id}`).expect(200)
+
+    expect(response.body).toEqual({
+      product: { name, size, description, _id, __v },
+    })
+  })
 })
