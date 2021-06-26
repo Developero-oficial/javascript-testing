@@ -107,4 +107,38 @@ describe('products integration tests', () => {
       product: { name, size, description, _id, __v },
     })
   })
+
+  test('PUT /products', async () => {
+    const product = buildProduct()
+
+    const responsePost = await request(app)
+      .post('/products')
+      .send({
+        name: product.name,
+        size: product.size,
+        description: product.description,
+      })
+      .expect(201)
+
+    const { _id, __v } = responsePost.body.productStored
+
+    const newProductValues = {
+      name: 'this is a new name',
+      size: 100,
+      description: 'test pass',
+    }
+
+    const response = await request(app)
+      .put(`/products/${_id}`)
+      .send(newProductValues)
+      .expect(200)
+
+    expect(response.body).toEqual({
+      productUpdated: {
+        ...newProductValues,
+        _id,
+        __v,
+      },
+    })
+  })
 })
