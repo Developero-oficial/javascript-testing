@@ -141,4 +141,25 @@ describe('products integration tests', () => {
       },
     })
   })
+
+  test.only('DELETE /products/:uid', async () => {
+    const product = buildProduct()
+
+    const responsePost = await request(app)
+      .post('/products')
+      .send({
+        name: product.name,
+        size: product.size,
+        description: product.description,
+      })
+      .expect(201)
+
+    const { _id } = responsePost.body.productStored
+
+    const response = await request(app).delete(`/products/${_id}`).expect(200)
+
+    console.log(response.body)
+
+    expect(response.body.productRemoved.deletedCount).toBe(1)
+  })
 })
