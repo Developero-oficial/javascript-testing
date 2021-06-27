@@ -128,4 +128,28 @@ describe('products unit tests', () => {
       message: `the ${invalidUid} is invalid`,
     })
   })
+
+  test('PUT /products validate uid', async () => {
+    const invalidUid = 'abc'
+
+    const response = await request(app)
+      .put(`/products/${invalidUid}`)
+      .expect(400)
+
+    expect(response.body).toEqual({
+      message: `the ${invalidUid} is invalid`,
+    })
+  })
+
+  test('PUT /products validate required values', async () => {
+    const product = buildProduct()
+
+    const response = await request(app)
+      .put(`/products/${product._id}`)
+      .expect(400)
+
+    expect(response.body).toEqual({
+      message: 'name, size and description are required',
+    })
+  })
 })

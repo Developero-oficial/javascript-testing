@@ -21,7 +21,11 @@ productRoutes.get('/products', getProductsController)
 
 productRoutes.get('/products/:uid', validateUid, getProductByUidController)
 
-productRoutes.put('/products/:uid', updateProductByUidController)
+productRoutes.put('/products/:uid', [
+  validateUid,
+  validateRequiredValues,
+  updateProductByUidController,
+])
 
 productRoutes.delete('/products/:uid', deleteProductByUidController)
 
