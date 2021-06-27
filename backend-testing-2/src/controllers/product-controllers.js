@@ -18,9 +18,13 @@ module.exports.saveProductController = async (req, res) => {
   res.status(201).send({ productStored })
 }
 
-module.exports.getProductsController = async (req, res) => {
-  const products = await getProducts()
-  res.status(200).send({ products })
+module.exports.getProductsController = async (req, res, next) => {
+  try {
+    const products = await getProducts()
+    res.status(200).send({ products })
+  } catch (e) {
+    next(e)
+  }
 }
 
 module.exports.getProductByUidController = async (req, res) => {

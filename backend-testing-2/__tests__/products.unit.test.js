@@ -159,4 +159,14 @@ describe('products unit tests', () => {
       message: `the ${invalidUid} is invalid`,
     })
   })
+
+  test('GET /products error handler', async () => {
+    getProducts.mockImplementation(() => {
+      throw new Error('test')
+    })
+
+    const response = await request(app).get('/products').expect(500)
+
+    expect(response.body).toEqual({ message: 'something is wrong' })
+  })
 })
