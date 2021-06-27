@@ -93,18 +93,15 @@ describe('products unit tests', () => {
   })
 
   test('DELETE /products/:uid', async () => {
-    const product = buildProduct({
-      name: 'fake',
-      size: 1,
-      description: 'this is a test',
-      _id: 'abc',
-    })
+    const product = buildProduct()
 
     deleteProductByUid.mockReturnValueOnce(Promise.resolve(product))
 
-    const response = await request(app).delete('/products/abc').expect(200)
+    const response = await request(app)
+      .delete(`/products/${product._id}`)
+      .expect(200)
 
-    expect(deleteProductByUid).toHaveBeenCalledWith({ uid: 'abc' })
+    expect(deleteProductByUid).toHaveBeenCalledWith({ uid: product._id })
     expect(response.body).toEqual({
       productRemoved: product,
     })
@@ -150,6 +147,16 @@ describe('products unit tests', () => {
 
     expect(response.body).toEqual({
       message: 'name, size and description are required',
+    })
+  })
+
+  test('DELETE /products/:uid', async () => {
+    const invalidUid = 'abc'
+
+    const response = await request(app).delete('/products/abc').expect(400)
+
+    expect(response.body).toEqual({
+      message: `the ${invalidUid} is invalid`,
     })
   })
 })

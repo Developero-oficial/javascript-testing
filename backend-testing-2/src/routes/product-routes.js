@@ -27,6 +27,10 @@ productRoutes.put('/products/:uid', [
   updateProductByUidController,
 ])
 
-productRoutes.delete('/products/:uid', deleteProductByUidController)
+productRoutes.delete(
+  '/products/:uid',
+  validateUid,
+  deleteProductByUidController
+)
 
 module.exports.productRoutes = productRoutes
