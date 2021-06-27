@@ -53,9 +53,11 @@ describe('products unit tests', () => {
 
     getProductByUid.mockReturnValueOnce(product)
 
-    const response = await request(app).get('/products/abc').expect(200)
+    const response = await request(app)
+      .get(`/products/${product._id}`)
+      .expect(200)
 
-    expect(getProductByUid).toHaveBeenCalledWith({ uid: 'abc' })
+    expect(getProductByUid).toHaveBeenCalledWith({ uid: product._id })
 
     expect(response.body).toEqual({
       product,
@@ -68,7 +70,7 @@ describe('products unit tests', () => {
     updateProductByUid.mockReturnValueOnce(Promise.resolve(product))
 
     const response = await request(app)
-      .put('/products/abc')
+      .put(`/products/${product._id}`)
       .send({
         name: product.name,
         size: product.size,
@@ -113,6 +115,17 @@ describe('products unit tests', () => {
 
     expect(response.body).toEqual({
       message: 'name, size and description are required',
+    })
+  })
+
+  test('GET /products/:uid validation of the uid', async () => {
+    const invalidUid = 'abc'
+    const response = await request(app)
+      .get(`/products/${invalidUid}`)
+      .expect(400)
+
+    expect(response.body).toEqual({
+      message: `the ${invalidUid} is invalid`,
     })
   })
 })

@@ -8,7 +8,10 @@ const {
   deleteProductByUidController,
 } = require('../controllers/product-controllers')
 
-const { validateRequiredValues } = require('../middlewares/product-middlewares')
+const {
+  validateRequiredValues,
+  validateUid,
+} = require('../middlewares/product-middlewares')
 
 const productRoutes = express.Router()
 
@@ -16,7 +19,7 @@ productRoutes.post('/products', validateRequiredValues, saveProductController)
 
 productRoutes.get('/products', getProductsController)
 
-productRoutes.get('/products/:uid', getProductByUidController)
+productRoutes.get('/products/:uid', validateUid, getProductByUidController)
 
 productRoutes.put('/products/:uid', updateProductByUidController)
 
