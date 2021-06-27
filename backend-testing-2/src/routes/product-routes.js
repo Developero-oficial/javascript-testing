@@ -8,9 +8,11 @@ const {
   deleteProductByUidController,
 } = require('../controllers/product-controllers')
 
+const { validateRequiredValues } = require('../middlewares/product-middlewares')
+
 const productRoutes = express.Router()
 
-productRoutes.post('/products', saveProductController)
+productRoutes.post('/products', validateRequiredValues, saveProductController)
 
 productRoutes.get('/products', getProductsController)
 

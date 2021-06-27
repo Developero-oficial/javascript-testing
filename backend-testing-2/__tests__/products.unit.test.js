@@ -107,4 +107,12 @@ describe('products unit tests', () => {
       productRemoved: product,
     })
   })
+
+  test('POST /products validations', async () => {
+    const response = await request(app).post('/products').expect(400)
+
+    expect(response.body).toEqual({
+      message: 'name, size and description are required',
+    })
+  })
 })
