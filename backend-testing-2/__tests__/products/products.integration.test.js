@@ -1,9 +1,9 @@
 const request = require('supertest')
 
-const app = require('../src/app')
-const { connectDb, createUri, closeDb, cleanDb } = require('../src/db/mongo')
-const { saveProduct } = require('../src/data/product-data')
-const { buildProduct } = require('../__fixtures__/product-fixtures')
+const app = require('../../src/app')
+const { connectDb, createUri, closeDb, cleanDb } = require('../../src/db/mongo')
+const { saveProduct } = require('../../src/data/product-data')
+const { buildProduct } = require('../../__fixtures__/product-fixtures')
 
 beforeAll(async () => {
   const mongoUri = await createUri()

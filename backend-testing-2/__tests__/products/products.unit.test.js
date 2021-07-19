@@ -1,16 +1,16 @@
 const request = require('supertest')
 
-const app = require('../src/app')
+const app = require('../../src/app')
 const {
   saveProduct,
   getProducts,
   getProductByUid,
   updateProductByUid,
   deleteProductByUid,
-} = require('../src/data/product-data')
-const { buildProduct } = require('../__fixtures__/product-fixtures')
+} = require('../../src/data/product-data')
+const { buildProduct } = require('../../__fixtures__/product-fixtures')
 
-jest.mock('../src/data/product-data')
+jest.mock('../../src/data/product-data')
 
 afterEach(() => {
   saveProduct.mockClear()
