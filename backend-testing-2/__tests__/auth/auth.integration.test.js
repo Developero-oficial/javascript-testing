@@ -1,7 +1,7 @@
 const request = require('supertest')
 
 const app = require('../../src/app')
-const { createUser } = require('../../src/data/user-data')
+const { createUser, findUserByEmail } = require('../../src/data/user-data')
 const { connectDb, createUri, closeDb, cleanDb } = require('../../src/db/mongo')
 
 beforeAll(async () => {
@@ -19,15 +19,22 @@ afterAll(async () => {
 
 describe('auth integration tests', () => {
   test('success signin', async () => {
+    const email = 'john.doe@mail.com'
+    const password = '123456789'
+
     const response = await request(app)
       .post('/signin')
       .send({
-        email: 'john.doe@mail.com',
-        password: '123456789',
+        email,
+        password,
       })
       .expect(200)
 
+    const user = await findUserByEmail({ email })
+
     expect(response.body.message).toBe('success')
+    expect(user.email).toBe(email)
+    expect(user.password).not.toBe(password)
   })
 
   test('required email and password fields', async () => {

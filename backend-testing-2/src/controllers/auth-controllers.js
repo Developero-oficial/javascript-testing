@@ -1,4 +1,4 @@
-const { findUserByEmail } = require('../data/user-data')
+const { findUserByEmail, createUser } = require('../data/user-data')
 
 module.exports.signin = async (req, res) => {
   const { email, password } = req.body
@@ -12,6 +12,8 @@ module.exports.signin = async (req, res) => {
   if (user) {
     return res.status(400).send({ message: 'user already exists' })
   }
+
+  await createUser({ email, password })
 
   res.status(200).send({ message: 'success' })
 }
