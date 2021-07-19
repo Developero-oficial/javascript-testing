@@ -1,6 +1,7 @@
 const request = require('supertest')
 
 const app = require('../../src/app')
+const { createUser } = require('../../src/data/user-data')
 const { connectDb, createUri, closeDb, cleanDb } = require('../../src/db/mongo')
 
 beforeAll(async () => {
@@ -33,5 +34,22 @@ describe('auth integration tests', () => {
     const response = await request(app).post('/signin').expect(400)
 
     expect(response.body.message).toBe('Email and password are required')
+  })
+
+  test('validate if email already exists', async () => {
+    const email = 'john.doe@mail.com'
+    const password = '123456789'
+
+    await createUser({ email, password })
+
+    const response = await request(app)
+      .post('/signin')
+      .send({
+        email,
+        password,
+      })
+      .expect(400)
+
+    expect(response.body.message).toBe('user already exists')
   })
 })
