@@ -101,4 +101,23 @@ describe('auth integration tests', () => {
       message: 'Email or password incorrect',
     })
   })
+
+  test('validate if password is correct on login', async () => {
+    const email = 'john.doe@mail.com'
+    const password = '123456789'
+
+    await createUser({ email, password })
+
+    const response = await request(app)
+      .post('/login')
+      .send({
+        email,
+        password: 'incorrectPassword',
+      })
+      .expect(400)
+
+    expect(response.body).toEqual({
+      message: 'Email or password incorrect',
+    })
+  })
 })

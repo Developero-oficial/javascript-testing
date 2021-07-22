@@ -1,4 +1,4 @@
-const { findUserByEmail, createUser } = require('../data/user-data')
+const { findUserByEmail, createUser, login } = require('../data/user-data')
 
 module.exports.signin = async (req, res) => {
   try {
@@ -24,18 +24,24 @@ module.exports.signin = async (req, res) => {
   }
 }
 
-module.exports.login = async (req, res) => {
-  const { email, password } = req.body
+module.exports.login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body
 
-  if (!email || !password) {
-    return res.status(400).send({ message: 'Email and password are required' })
+    if (!email || !password) {
+      return res
+        .status(400)
+        .send({ message: 'Email and password are required' })
+    }
+
+    await login({ email, password })
+
+    res.status(200).send({ token: 'my token' })
+  } catch (e) {
+    if (e.message === 'Invalid email or password') {
+      return res.status(400).send({ message: 'Email or password incorrect' })
+    }
+
+    next(e)
   }
-
-  const user = await findUserByEmail({ email })
-
-  if (!user) {
-    return res.status(400).send({ message: 'Email or password incorrect' })
-  }
-
-  res.status(200).send({ token: 'my token' })
 }
