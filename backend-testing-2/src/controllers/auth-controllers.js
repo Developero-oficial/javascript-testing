@@ -24,11 +24,17 @@ module.exports.signin = async (req, res) => {
   }
 }
 
-module.exports.login = (req, res) => {
+module.exports.login = async (req, res) => {
   const { email, password } = req.body
 
   if (!email || !password) {
     return res.status(400).send({ message: 'Email and password are required' })
+  }
+
+  const user = await findUserByEmail({ email })
+
+  if (!user) {
+    return res.status(400).send({ message: 'Email or password incorrect' })
   }
 
   res.status(200).send({ token: 'my token' })

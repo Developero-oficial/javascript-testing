@@ -64,6 +64,8 @@ describe('auth integration tests', () => {
     const email = 'john.doe@mail.com'
     const password = '123456789'
 
+    await createUser({ email, password })
+
     const response = await request(app)
       .post('/login')
       .send({
@@ -81,5 +83,22 @@ describe('auth integration tests', () => {
     const response = await request(app).post('/login').expect(400)
 
     expect(response.body.message).toBe('Email and password are required')
+  })
+
+  test('validate if email already exists on login', async () => {
+    const email = 'john.doe@mail.com'
+    const password = '123456789'
+
+    const response = await request(app)
+      .post('/login')
+      .send({
+        email,
+        password,
+      })
+      .expect(400)
+
+    expect(response.body).toEqual({
+      message: 'Email or password incorrect',
+    })
   })
 })
