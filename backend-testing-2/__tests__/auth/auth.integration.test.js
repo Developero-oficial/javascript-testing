@@ -1,6 +1,7 @@
 const request = require('supertest')
 
-const app = require('../../src/app')
+const app = require('../../src/server')
+const { verify } = require('../../src/utils/jwt')
 const { createUser, findUserByEmail } = require('../../src/data/user-data')
 const { connectDb, createUri, closeDb, cleanDb } = require('../../src/db/mongo')
 
@@ -74,9 +75,9 @@ describe('auth integration tests', () => {
       })
       .expect(200)
 
-    expect(response.body).toEqual({
-      token: 'my token',
-    })
+    const decoded = verify(response.body.token)
+
+    expect(decoded.email).toBe(email)
   })
 
   test('required email and password fields for login', async () => {

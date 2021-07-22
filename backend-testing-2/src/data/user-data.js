@@ -1,5 +1,7 @@
-const User = require('../models/user-model')
 const bcrypt = require('bcrypt')
+
+const User = require('../models/user-model')
+const { sign } = require('../utils/jwt')
 
 const hash = (str, saltRounds = 10) => {
   return bcrypt.hash(str, saltRounds)
@@ -33,7 +35,11 @@ module.exports.login = async ({ email, password }) => {
     throw new Error('Invalid email or password')
   }
 
-  return user
+  const token = sign({
+    email: user.email,
+  })
+
+  return token
 }
 
 module.exports.findUserByEmail = ({ email }) => {

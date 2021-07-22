@@ -34,9 +34,9 @@ module.exports.login = async (req, res, next) => {
         .send({ message: 'Email and password are required' })
     }
 
-    await login({ email, password })
+    const token = await login({ email, password })
 
-    res.status(200).send({ token: 'my token' })
+    res.status(200).send({ token })
   } catch (e) {
     if (e.message === 'Invalid email or password') {
       return res.status(400).send({ message: 'Email or password incorrect' })
