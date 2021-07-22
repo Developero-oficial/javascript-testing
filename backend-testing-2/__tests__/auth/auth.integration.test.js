@@ -76,4 +76,10 @@ describe('auth integration tests', () => {
       token: 'my token',
     })
   })
+
+  test('required email and password fields for login', async () => {
+    const response = await request(app).post('/login').expect(400)
+
+    expect(response.body.message).toBe('Email and password are required')
+  })
 })
