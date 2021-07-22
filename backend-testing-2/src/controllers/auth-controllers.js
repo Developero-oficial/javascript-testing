@@ -24,4 +24,6 @@ module.exports.signin = async (req, res) => {
   }
 }
 
-module.exports.login = (req, res) => {}
+module.exports.login = (req, res) => {
+  res.status(200).send({ token: 'my token' })
+}

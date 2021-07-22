@@ -59,4 +59,21 @@ describe('auth integration tests', () => {
 
     expect(response.body.message).toBe('user already exists')
   })
+
+  test('success login', async () => {
+    const email = 'john.doe@mail.com'
+    const password = '123456789'
+
+    const response = await request(app)
+      .post('/login')
+      .send({
+        email,
+        password,
+      })
+      .expect(200)
+
+    expect(response.body).toEqual({
+      token: 'my token',
+    })
+  })
 })
