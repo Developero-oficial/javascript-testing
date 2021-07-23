@@ -9,8 +9,10 @@ const {
   deleteProductByUid,
 } = require('../../src/data/product-data')
 const { buildProduct } = require('../../__fixtures__/product-fixtures')
+const { verify } = require('../../src/utils/jwt')
 
 jest.mock('../../src/data/product-data')
+jest.mock('../../src/utils/jwt')
 
 afterEach(() => {
   saveProduct.mockClear()
@@ -18,6 +20,7 @@ afterEach(() => {
   getProductByUid.mockClear()
   updateProductByUid.mockClear()
   deleteProductByUid.mockClear()
+  verify.mockClear()
 })
 
 describe('products unit tests', () => {
@@ -42,8 +45,12 @@ describe('products unit tests', () => {
 
   test('GET /products', async () => {
     getProducts.mockReturnValueOnce([])
+    verify.mockReturnValueOnce({})
 
-    const response = await request(app).get('/products').expect(200)
+    const response = await request(app)
+      .get('/products')
+      .set('Authorization', 'Bearer myToken')
+      .expect(200)
 
     expect(response.body).toEqual({ products: [] })
   })
@@ -164,8 +171,12 @@ describe('products unit tests', () => {
     getProducts.mockImplementation(() => {
       throw new Error('test')
     })
+    verify.mockReturnValueOnce({})
 
-    const response = await request(app).get('/products').expect(500)
+    const response = await request(app)
+      .get('/products')
+      .set('Authorization', 'Bearer myToken')
+      .expect(500)
 
     expect(response.body).toEqual({ message: 'something is wrong' })
   })

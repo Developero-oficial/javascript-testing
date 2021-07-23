@@ -18,10 +18,12 @@ module.exports.isAuthHandler = (req, res, next) => {
   try {
     const payloadDecoded = verify(token)
 
+    req.data = {}
     req.data.payload = payloadDecoded
 
     next()
   } catch (e) {
+    console.log(e)
     res.status(401).send({ message: 'Invalid token authentication' })
   }
 }
