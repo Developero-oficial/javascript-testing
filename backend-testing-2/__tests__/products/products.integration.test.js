@@ -1,9 +1,10 @@
 const request = require('supertest')
 
-const app = require('../../src/app')
+const app = require('../../src/server')
 const { connectDb, createUri, closeDb, cleanDb } = require('../../src/db/mongo')
 const { saveProduct } = require('../../src/data/product-data')
 const { buildProduct } = require('../../__fixtures__/product-fixtures')
+const { sign } = require('../../src/utils/jwt')
 
 beforeAll(async () => {
   const mongoUri = await createUri()
@@ -40,7 +41,12 @@ describe('products integration tests', () => {
   })
 
   test('GET /products empty values', async () => {
-    const response = await request(app).get('/products').expect(200)
+    const token = sign({ email: 'john.doe@mail.com' })
+
+    const response = await request(app)
+      .get('/products')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
 
     expect(response.body).toEqual({ products: [] })
   })
@@ -52,7 +58,12 @@ describe('products integration tests', () => {
 
     const { name, size, description, _id, __v } = productStored
 
-    const responseGet = await request(app).get('/products').expect(200)
+    const token = sign({ email: 'john.doe@mail.com' })
+
+    const responseGet = await request(app)
+      .get('/products')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
 
     expect(responseGet.body).toEqual({
       products: [{ name, size, description, _id: String(_id), __v }],
