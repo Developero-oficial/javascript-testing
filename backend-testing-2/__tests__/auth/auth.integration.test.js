@@ -121,4 +121,34 @@ describe('auth integration tests', () => {
       message: 'Email or password incorrect',
     })
   })
+
+  test('validate protected endpoint contains Authorization header', async () => {
+    const response = await request(app).get('/products').expect(403)
+
+    expect(response.body).toEqual({
+      message: 'The Authorization header was not sent',
+    })
+  })
+
+  test('validate protected endpoint valid bearer', async () => {
+    const response = await request(app)
+      .get('/products')
+      .set('Authorization', 'foo')
+      .expect(403)
+
+    expect(response.body).toEqual({
+      message: 'The Authorization header does not contain Bearer',
+    })
+  })
+
+  test('validate protected endpoint valid token', async () => {
+    const response = await request(app)
+      .get('/products')
+      .set('Authorization', 'Bearer invalidToken')
+      .expect(401)
+
+    expect(response.body).toEqual({
+      message: 'Invalid token authentication',
+    })
+  })
 })
