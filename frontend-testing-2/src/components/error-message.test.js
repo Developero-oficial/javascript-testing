@@ -4,7 +4,7 @@ import {ErrorMessage} from './errorMessage'
 
 describe('ErroeMessage', () => {
   test('should render a texr', () => {
-    render(<ErrorMessage text="test test" />)
+    render(<ErrorMessage text="test pass" />)
 
     const textEl = screen.getByText(/test pass/i)
 
