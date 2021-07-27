@@ -6,6 +6,18 @@ import {DashboardPage} from '.'
 
 jest.mock('../../services/products-services')
 
+const makeProducts = ({
+  _id = 'abc',
+  name = 'test',
+  size = 1,
+  description = 'pass',
+} = {}) => ({
+  _id,
+  name,
+  size,
+  description,
+})
+
 const WithProviders = ({children}) => <Router>{children}</Router>
 
 beforeEach(() => {
@@ -39,5 +51,20 @@ describe('DashboardPage unit', () => {
     render(<DashboardPage />, {wrapper: WithProviders})
 
     expect(await screen.findByText(/there was an error/i)).toBeInTheDocument()
+  })
+
+  test('should render the API data', async () => {
+    getProductsService.mockReturnValueOnce({
+      data: {
+        products: [makeProducts()],
+      },
+    })
+    render(<DashboardPage />, {wrapper: WithProviders})
+
+    expect(await screen.findByText(/products/i)).toBeInTheDocument()
+
+    expect(screen.getByText(/test/i)).toBeInTheDocument()
+    expect(screen.getByText('1')).toBeInTheDocument()
+    expect(screen.getByText(/pass/i)).toBeInTheDocument()
   })
 })

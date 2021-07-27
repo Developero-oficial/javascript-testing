@@ -66,7 +66,6 @@ export const DashboardPage = () => {
         setProducts(products)
         setIsErrorFetchingProducts(false)
       } catch (e) {
-        console.log(e)
         setIsErrorFetchingProducts(true)
       } finally {
         setIsFetchingProducts(false)
