@@ -8,6 +8,10 @@ jest.mock('../../services/products-services')
 
 const WithProviders = ({children}) => <Router>{children}</Router>
 
+beforeEach(() => {
+  getProductsService.mockReset()
+})
+
 describe('DashboardPage unit', () => {
   test('should render an add new button', async () => {
     getProductsService.mockReturnValueOnce({data: {products: []}})
@@ -25,5 +29,15 @@ describe('DashboardPage unit', () => {
     expect(screen.getByTestId(/loading/i)).toBeInTheDocument()
 
     expect(await screen.findByText(/empty/i)).toBeInTheDocument()
+  })
+
+  test('should render error message when the API returns an error', async () => {
+    getProductsService.mockImplementation(() => {
+      throw new Error('test')
+    })
+
+    render(<DashboardPage />, {wrapper: WithProviders})
+
+    expect(await screen.findByText(/there was an error/i)).toBeInTheDocument()
   })
 })
