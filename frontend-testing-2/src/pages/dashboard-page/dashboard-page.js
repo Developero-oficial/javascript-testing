@@ -98,7 +98,7 @@ export const DashboardPage = () => {
         </Grid>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            {isFetchingProducts && <CircularProgress />}
+            {isFetchingProducts && <CircularProgress data-testid="loading" />}
             {isErrorOnLoadProducts && (
               <ErrorMessage text="There was an error" />
             )}
