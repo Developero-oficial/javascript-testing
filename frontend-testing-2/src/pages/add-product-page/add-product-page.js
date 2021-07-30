@@ -12,9 +12,42 @@ import {Link} from 'react-router-dom'
 import {Layout} from '../../components/layout'
 import {saveProductService} from '../../services/products-services'
 
+const initialFormValidations = {
+  name: '',
+  size: '',
+  description: '',
+}
+
 export const AddProductPage = () => {
   const [isSaving, setIsSaving] = React.useState(false)
   const [isSavedSuccess, setIsSavedSuccess] = React.useState(false)
+  const [formValidations, setFormValidations] = React.useState(
+    initialFormValidations,
+  )
+
+  const getIsValidForm = ({name, size, description}) => {
+    const formValidations = {
+      name: '',
+      size: '',
+      description: '',
+    }
+
+    if (!name) {
+      formValidations.name = 'The name is required'
+    }
+
+    if (!size) {
+      formValidations.size = 'The size is required'
+    }
+
+    if (!description) {
+      formValidations.description = 'The description is required'
+    }
+
+    setFormValidations(formValidations)
+
+    return name && size && description
+  }
 
   const handleCloseSnackbar = e => {
     setIsSavedSuccess(false)
@@ -25,11 +58,22 @@ export const AddProductPage = () => {
       setIsSaving(true)
       e.preventDefault()
       const {name, size, description} = e.target.elements
-      const response = await saveProductService({
+
+      const formValues = {
         name: name.value,
         size: size.value,
         description: description.value,
-      })
+      }
+
+      const isValidForm = getIsValidForm(formValues)
+
+      if (!isValidForm) {
+        return
+      }
+
+      const response = await saveProductService(formValues)
+
+      setFormValidations(initialFormValidations)
 
       if (response.status === 201) {
         name.value = ''
@@ -60,7 +104,14 @@ export const AddProductPage = () => {
 
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <TextField id="name" name="name" label="Name" fullWidth />
+              <TextField
+                id="name"
+                name="name"
+                label="Name"
+                fullWidth
+                error={!!formValidations.name}
+                helperText={formValidations.name}
+              />
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -69,6 +120,8 @@ export const AddProductPage = () => {
                 name="size"
                 label="Size"
                 fullWidth
+                error={!!formValidations.size}
+                helperText={formValidations.size}
               />
             </Grid>
             <Grid item xs={12}>
@@ -77,6 +130,8 @@ export const AddProductPage = () => {
                 name="description"
                 label="Description"
                 fullWidth
+                error={!!formValidations.description}
+                helperText={formValidations.description}
               />
             </Grid>
             <Grid item xs={12} sm={6}>

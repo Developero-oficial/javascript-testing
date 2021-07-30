@@ -47,4 +47,25 @@ describe('AddProductPage Unit', () => {
       await screen.findByText(/Product saved successfully/i),
     ).toBeInTheDocument()
   })
+
+  test('should validate required fields', () => {
+    render(
+      <WithProviders>
+        <AddProductPage />
+      </WithProviders>,
+    )
+
+    const btnEl = screen.getByRole('button', {name: /save/i})
+    fireEvent.click(btnEl)
+
+    const nameRequiredEl = screen.getByText(/the name is required/i)
+    const sizeRequiredEl = screen.getByText(/the size is required/i)
+    const descriptionRequiredEl = screen.getByText(
+      /the description is required/i,
+    )
+
+    expect(nameRequiredEl).toBeInTheDocument()
+    expect(sizeRequiredEl).toBeInTheDocument()
+    expect(descriptionRequiredEl).toBeInTheDocument()
+  })
 })
