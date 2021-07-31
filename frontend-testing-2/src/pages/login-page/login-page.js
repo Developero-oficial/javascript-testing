@@ -75,9 +75,11 @@ export const LoginPage = () => {
       })
 
       if (response.status === 200) {
-        onLoginSuccess(response.data.user)
+        const {token} = response.data
+        onLoginSuccess({token})
       }
     } catch (error) {
+      console.log(error)
       if (error.response) {
         const {errorMessage} = error.response.data
         return setErrorMsg(errorMessage)

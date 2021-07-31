@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 
+import {AuthContext} from '../contexts/auth-context'
+
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -47,12 +49,9 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const username = 'John Doe'
-
-const handleLogout = () => console.log('logout')
-
 export const Layout = ({children}) => {
   const classes = useStyles()
+  const {handleLogout, user} = React.useContext(AuthContext)
 
   return (
     <div className={classes.root}>
@@ -66,7 +65,7 @@ export const Layout = ({children}) => {
           >
             Dashboard
           </Typography>
-          <Typography>{username}</Typography>
+          <Typography>{user.email}</Typography>
           <Button
             color="secondary"
             variant="contained"

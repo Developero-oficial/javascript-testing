@@ -7,18 +7,19 @@ import {setItem, getItem, removeItem} from '../utils/storage-utils'
 export const AuthGuard = ({children}) => {
   const [isChecking, setIsChecking] = React.useState(true)
   const [isAuth, setIsAuth] = React.useState(false)
-  const [user, setUser] = React.useState({username: ''})
+  const [user, setUser] = React.useState({email: ''})
 
   const onLoginSuccess = React.useCallback(({token}) => {
-    const {username} = decodeJwt(token)
+    const decoded = decodeJwt(token)
+    const {email} = decoded
     setItem({key: '@token', value: token})
     setIsAuth(true)
-    setUser({username})
+    setUser({email})
   }, [])
 
   const handleLogout = () => {
     setIsAuth(false)
-    setUser({username: ''})
+    setUser({email: ''})
     removeItem({key: '@token'})
   }
 

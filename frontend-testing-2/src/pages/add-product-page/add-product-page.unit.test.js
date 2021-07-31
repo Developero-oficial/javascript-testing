@@ -1,12 +1,10 @@
 import {screen, render, fireEvent} from '@testing-library/react'
-import {BrowserRouter as Router} from 'react-router-dom'
 import {saveProductService} from '../../services/products-services'
 
 import {AddProductPage} from '.'
+import {WithProviders} from '../../utils/test-utils'
 
 jest.mock('../../services/products-services')
-
-const WithProviders = ({children}) => <Router>{children}</Router>
 
 beforeEach(() => {
   saveProductService.mockReset()

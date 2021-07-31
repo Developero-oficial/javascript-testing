@@ -1,8 +1,8 @@
 import {screen, render} from '@testing-library/react'
-import {BrowserRouter as Router} from 'react-router-dom'
 import {getProductsService} from '../../services/products-services'
 
 import {DashboardPage} from '.'
+import {WithProviders} from '../../utils/test-utils'
 
 jest.mock('../../services/products-services')
 
@@ -17,8 +17,6 @@ const makeProducts = ({
   size,
   description,
 })
-
-const WithProviders = ({children}) => <Router>{children}</Router>
 
 beforeEach(() => {
   getProductsService.mockReset()
