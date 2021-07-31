@@ -44,4 +44,18 @@ describe('LoginPage Integration', () => {
     expect(emailRequiredEl).toBeInTheDocument()
     expect(passwordRequiredEl).toBeInTheDocument()
   })
+
+  test('should succesfully handle errors on login', async () => {
+    const emailInputEl = screen.getByLabelText(/email address/i)
+    const passwordInputEl = screen.getByLabelText(/password/i)
+    const submitBtnEl = screen.getByRole('button', {name: /send/i})
+
+    fireEvent.change(emailInputEl, {target: {value: 'test.errordoe@mail.com'}})
+    fireEvent.change(passwordInputEl, {target: {value: '123'}})
+    fireEvent.click(submitBtnEl)
+
+    const errorMessageEl = await screen.findByText(/unexpected error/i)
+
+    expect(errorMessageEl).toBeInTheDocument()
+  })
 })

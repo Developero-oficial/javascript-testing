@@ -79,12 +79,6 @@ export const LoginPage = () => {
         onLoginSuccess({token})
       }
     } catch (error) {
-      console.log(error)
-      if (error.response) {
-        const {errorMessage} = error.response.data
-        return setErrorMsg(errorMessage)
-      }
-
       setErrorMsg('Unexpected error. Please refresh the browser and try again')
     } finally {
       setIsFetching(false)
