@@ -15,7 +15,14 @@ export const handlers = [
     return res(ctx.status(200), ctx.json({token}))
   }),
   rest.get(`${baseApiUrl}/products`, (req, res, ctx) => {
-    return res(ctx.status(200))
+    const singleProduct = {
+      _id: 'abc',
+      name: 'test',
+      description: 'pass',
+      size: 1,
+    }
+    const products = [singleProduct]
+    return res(ctx.status(200), ctx.json({products}))
   }),
   rest.post(`${baseApiUrl}/products`, (req, res, ctx) => {
     return res(ctx.status(200))
