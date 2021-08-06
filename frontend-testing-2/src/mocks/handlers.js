@@ -25,6 +25,6 @@ export const handlers = [
     return res(ctx.status(200), ctx.json({products}))
   }),
   rest.post(`${baseApiUrl}/products`, (req, res, ctx) => {
-    return res(ctx.status(200))
+    return res(ctx.status(201))
   }),
 ]
