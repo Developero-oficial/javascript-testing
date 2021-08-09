@@ -4,10 +4,14 @@
     "react-app/jest",
     "plugin:jsx-a11y/recommended",
     "prettier",
-    "eslint-config-prettier"
+    "eslint-config-prettier",
+    "plugin:cypress/recommended"
   ],
-  "plugins": ["jsx-a11y", "prettier"],
+  "env": {
+    "cypress/globals": true
+  },
+  "plugins": ["jsx-a11y", "prettier", "cypress"],
   "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"]}]
   }
 }

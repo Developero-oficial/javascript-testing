@@ -26,7 +26,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint --ignore-path .gitignore .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js)\"",
-    "e2e": "cypress open"
+    "e2e": "cypress open",
+    "ci": "start-server-and-test start http://localhost:3000 e2e"
   },
   "eslintConfig": {
     "extends": [
@@ -47,12 +48,15 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/cypress": "^8.0.0",
     "cypress": "^8.2.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-cypress": "^2.11.3",
     "eslint-plugin-prettier": "^3.4.0",
     "jsonwebtoken": "^8.5.1",
     "msw": "^0.33.1",
     "prettier": "^2.3.2",
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "start-server-and-test": "^1.13.1"
   }
 }
