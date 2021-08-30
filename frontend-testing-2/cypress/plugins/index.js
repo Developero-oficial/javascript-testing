@@ -11,12 +11,27 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
+const axios = require('axios')
+
+const users = require('../fixtures/users.json')
 
 /**
  * @type {Cypress.PluginConfig}
  */
 // eslint-disable-next-line no-unused-vars
 module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
+  on('task', {
+    async 'db:seed:user'() {
+      const response = await axios.post('http://localhost:8080/seed', {
+        schema: 'users',
+        collectionData: [users.admin],
+      })
+
+      return response.data
+    },
+    async 'db:delete:collections'() {
+      const response = await axios.delete('http://localhost:8080/collections')
+      return response.data
+    },
+  })
 }

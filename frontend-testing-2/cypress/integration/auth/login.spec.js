@@ -2,6 +2,8 @@
 
 describe('login e2e', function () {
   beforeEach(function () {
+    cy.task('db:delete:collections')
+    cy.task('db:seed:user')
     cy.fixture('users').then(users => {
       this.admin = users.admin
     })
