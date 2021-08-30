@@ -4,6 +4,7 @@ const cors = require('cors')
 
 const { productRoutes } = require('./routes/product-routes')
 const { authRoutes } = require('./routes/auth-routes')
+const { seedRoutes } = require('./routes/seed-routes')
 const { errorHandler } = require('./middlewares/error-handler-middlewares')
 
 const app = express()
@@ -18,6 +19,10 @@ app.use(express.json())
 
 app.use(productRoutes)
 app.use(authRoutes)
+
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+  app.use(seedRoutes)
+}
 
 app.use(errorHandler)
 
