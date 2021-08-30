@@ -19,9 +19,11 @@ const users = require('../fixtures/users.json')
 /**
  * @type {Cypress.PluginConfig}
  */
-// eslint-disable-next-line no-unused-vars
+
 module.exports = (on, config) => {
   const apiBaseUrl = process.env.REACT_APP_API_BASE_URL
+
+  config.env.backendApi = apiBaseUrl
 
   on('task', {
     async 'db:seed:user'() {
@@ -37,4 +39,6 @@ module.exports = (on, config) => {
       return response.data
     },
   })
+
+  return config
 }
