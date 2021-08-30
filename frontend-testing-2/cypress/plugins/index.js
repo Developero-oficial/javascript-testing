@@ -15,6 +15,7 @@ const axios = require('axios')
 require('dotenv').config()
 
 const users = require('../fixtures/users.json')
+const productsData = require('../fixtures/products.json')
 
 /**
  * @type {Cypress.PluginConfig}
@@ -30,6 +31,14 @@ module.exports = (on, config) => {
       const response = await axios.post(`${apiBaseUrl}/seed`, {
         schema: 'users',
         collectionData: [users.admin],
+      })
+
+      return response.data
+    },
+    async 'db:seed:products'() {
+      const response = await axios.post(`${apiBaseUrl}/seed`, {
+        schema: 'products',
+        collectionData: productsData.products,
       })
 
       return response.data

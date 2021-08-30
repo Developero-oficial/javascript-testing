@@ -1,0 +1,9 @@
+{
+  "products": [
+    {"name": "test 1", "size": "10", "description": "product 1"},
+    {"name": "test 2", "size": "20", "description": "product 2"},
+    {"name": "test 3", "size": "30", "description": "product 3"},
+    {"name": "test 4", "size": "40", "description": "product 4"},
+    {"name": "test 5", "size": "50", "description": "product 5"}
+  ]
+}
