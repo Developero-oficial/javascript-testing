@@ -12,6 +12,7 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 const axios = require('axios')
+require('dotenv').config()
 
 const users = require('../fixtures/users.json')
 
@@ -20,9 +21,11 @@ const users = require('../fixtures/users.json')
  */
 // eslint-disable-next-line no-unused-vars
 module.exports = (on, config) => {
+  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL
+
   on('task', {
     async 'db:seed:user'() {
-      const response = await axios.post('http://localhost:8080/seed', {
+      const response = await axios.post(`${apiBaseUrl}/seed`, {
         schema: 'users',
         collectionData: [users.admin],
       })
@@ -30,7 +33,7 @@ module.exports = (on, config) => {
       return response.data
     },
     async 'db:delete:collections'() {
-      const response = await axios.delete('http://localhost:8080/collections')
+      const response = await axios.delete(`${apiBaseUrl}/collections`)
       return response.data
     },
   })
